@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		075B559D29EB393E004E02B3 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 075B559C29EB393E004E02B3 /* GoogleMobileAds */; };
+		075B559F29EB3A82004E02B3 /* AdMobBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075B559E29EB3A82004E02B3 /* AdMobBannerView.swift */; };
+		076384C929E872BA005DBD5A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076384C829E872BA005DBD5A /* AppDelegate.swift */; };
+		076384CE29E87A15005DBD5A /* OAuthSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 076384CD29E87A15005DBD5A /* OAuthSwift */; };
+		076384D029E95B5D005DBD5A /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076384CF29E95B5D005DBD5A /* ShareSheet.swift */; };
+		076384D629EA82FA005DBD5A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076384D529EA82FA005DBD5A /* SettingsView.swift */; };
+		076384D829EA8660005DBD5A /* UpdateTrackRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076384D729EA8660005DBD5A /* UpdateTrackRepository.swift */; };
+		076384DA29EA88E9005DBD5A /* KeyChainRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076384D929EA88E9005DBD5A /* KeyChainRepository.swift */; };
+		076384DC29EA9A09005DBD5A /* FormatParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076384DB29EA9A09005DBD5A /* FormatParser.swift */; };
+		07779B5429EC117800266F87 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 07779B5629EC117800266F87 /* Localizable.strings */; };
 		07D3808929E84A48003376C1 /* NowPlaying4iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D3808829E84A48003376C1 /* NowPlaying4iOSApp.swift */; };
 		07D3808B29E84A48003376C1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D3808A29E84A48003376C1 /* ContentView.swift */; };
 		07D3808D29E84A49003376C1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07D3808C29E84A49003376C1 /* Assets.xcassets */; };
@@ -34,6 +44,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		075B559E29EB3A82004E02B3 /* AdMobBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobBannerView.swift; sourceTree = "<group>"; };
+		076384C829E872BA005DBD5A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		076384CF29E95B5D005DBD5A /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		076384D529EA82FA005DBD5A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		076384D729EA8660005DBD5A /* UpdateTrackRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateTrackRepository.swift; sourceTree = "<group>"; };
+		076384D929EA88E9005DBD5A /* KeyChainRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainRepository.swift; sourceTree = "<group>"; };
+		076384DB29EA9A09005DBD5A /* FormatParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatParser.swift; sourceTree = "<group>"; };
+		07779B5129EC0C0E00266F87 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		07779B5529EC117800266F87 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		07779B5729EC118200266F87 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		07D3808529E84A48003376C1 /* NowPlaying4iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NowPlaying4iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07D3808829E84A48003376C1 /* NowPlaying4iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlaying4iOSApp.swift; sourceTree = "<group>"; };
 		07D3808A29E84A48003376C1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -51,6 +71,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				075B559D29EB393E004E02B3 /* GoogleMobileAds in Frameworks */,
+				076384CE29E87A15005DBD5A /* OAuthSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +93,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		076384CA29E876A0005DBD5A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		07D3807C29E84A48003376C1 = {
 			isa = PBXGroup;
 			children = (
@@ -78,6 +107,7 @@
 				07D3809829E84A4A003376C1 /* NowPlaying4iOSTests */,
 				07D380A229E84A4A003376C1 /* NowPlaying4iOSUITests */,
 				07D3808629E84A48003376C1 /* Products */,
+				076384CA29E876A0005DBD5A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -98,6 +128,15 @@
 				07D3808A29E84A48003376C1 /* ContentView.swift */,
 				07D3808C29E84A49003376C1 /* Assets.xcassets */,
 				07D3808E29E84A49003376C1 /* Preview Content */,
+				076384C829E872BA005DBD5A /* AppDelegate.swift */,
+				076384CF29E95B5D005DBD5A /* ShareSheet.swift */,
+				076384D529EA82FA005DBD5A /* SettingsView.swift */,
+				076384D729EA8660005DBD5A /* UpdateTrackRepository.swift */,
+				076384D929EA88E9005DBD5A /* KeyChainRepository.swift */,
+				076384DB29EA9A09005DBD5A /* FormatParser.swift */,
+				075B559E29EB3A82004E02B3 /* AdMobBannerView.swift */,
+				07779B5129EC0C0E00266F87 /* Config.xcconfig */,
+				07779B5629EC117800266F87 /* Localizable.strings */,
 			);
 			path = NowPlaying4iOS;
 			sourceTree = "<group>";
@@ -143,6 +182,10 @@
 			dependencies = (
 			);
 			name = NowPlaying4iOS;
+			packageProductDependencies = (
+				076384CD29E87A15005DBD5A /* OAuthSwift */,
+				075B559C29EB393E004E02B3 /* GoogleMobileAds */,
+			);
 			productName = NowPlaying4iOS;
 			productReference = 07D3808529E84A48003376C1 /* NowPlaying4iOS.app */;
 			productType = "com.apple.product-type.application";
@@ -213,8 +256,13 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 07D3807C29E84A48003376C1;
+			packageReferences = (
+				076384CC29E87A15005DBD5A /* XCRemoteSwiftPackageReference "OAuthSwift" */,
+				075B559B29EB393E004E02B3 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+			);
 			productRefGroup = 07D3808629E84A48003376C1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -232,6 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				07D3809029E84A49003376C1 /* Preview Assets.xcassets in Resources */,
+				07779B5429EC117800266F87 /* Localizable.strings in Resources */,
 				07D3808D29E84A49003376C1 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -257,8 +306,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				076384D629EA82FA005DBD5A /* SettingsView.swift in Sources */,
 				07D3808B29E84A48003376C1 /* ContentView.swift in Sources */,
+				076384D029E95B5D005DBD5A /* ShareSheet.swift in Sources */,
+				076384DC29EA9A09005DBD5A /* FormatParser.swift in Sources */,
+				076384DA29EA88E9005DBD5A /* KeyChainRepository.swift in Sources */,
+				075B559F29EB3A82004E02B3 /* AdMobBannerView.swift in Sources */,
 				07D3808929E84A48003376C1 /* NowPlaying4iOSApp.swift in Sources */,
+				076384D829EA8660005DBD5A /* UpdateTrackRepository.swift in Sources */,
+				076384C929E872BA005DBD5A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,9 +350,22 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		07779B5629EC117800266F87 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07779B5529EC117800266F87 /* en */,
+				07779B5729EC118200266F87 /* ja */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		07D380A729E84A4A003376C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 07779B5129EC0C0E00266F87 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -357,6 +426,7 @@
 		};
 		07D380A829E84A4A003376C1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 07779B5129EC0C0E00266F87 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -411,24 +481,31 @@
 		};
 		07D380AA29E84A4A003376C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 07779B5129EC0C0E00266F87 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"NowPlaying4iOS/Preview Content\"";
+				DEVELOPMENT_TEAM = 5228F48D57;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NowPlaying4iOS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NowPlaying4iOS;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Use Media Library for obtaining playing music information";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.geckour.NowPlaying4iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -439,24 +516,31 @@
 		};
 		07D380AB29E84A4A003376C1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 07779B5129EC0C0E00266F87 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"NowPlaying4iOS/Preview Content\"";
+				DEVELOPMENT_TEAM = 5228F48D57;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NowPlaying4iOS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NowPlaying4iOS;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Use Media Library for obtaining playing music information";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.geckour.NowPlaying4iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -577,6 +661,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		075B559B29EB393E004E02B3 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.0;
+			};
+		};
+		076384CC29E87A15005DBD5A /* XCRemoteSwiftPackageReference "OAuthSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/OAuthSwift/OAuthSwift";
+			requirement = {
+				kind = exactVersion;
+				version = 2.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		075B559C29EB393E004E02B3 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 075B559B29EB393E004E02B3 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+		076384CD29E87A15005DBD5A /* OAuthSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 076384CC29E87A15005DBD5A /* XCRemoteSwiftPackageReference "OAuthSwift" */;
+			productName = OAuthSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 07D3807D29E84A48003376C1 /* Project object */;
 }

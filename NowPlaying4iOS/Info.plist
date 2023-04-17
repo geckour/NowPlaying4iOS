@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ADMOB_APPLICATION_ID</key>
+	<string>$(ADMOB_APPLICATION_ID)</string>
+	<key>ADMOB_BANNER_UNIT_ID</key>
+	<string>$(ADMOB_BANNER_UNIT_ID)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.geckour.NowPlaying4iOS</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>np4ios</string>
+			</array>
+		</dict>
+	</array>
+	<key>GADApplicationIdentifier</key>
+	<string>$(ADMOB_APPLICATION_ID)</string>
+	<key>SPOTIFY_CLIENT_KEY</key>
+	<string>$(SPOTIFY_CLIENT_KEY)</string>
+	<key>SPOTIFY_CLIENT_SECRET</key>
+	<string>$(SPOTIFY_CLIENT_SECRET)</string>
+</dict>
+</plist>

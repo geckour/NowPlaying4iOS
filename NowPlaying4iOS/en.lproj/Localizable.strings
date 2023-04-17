@@ -1,0 +1,19 @@
+/* 
+  Localizable.strings
+  NowPlaying4iOS
+
+  Created by geckour on 2023/04/16.
+  
+*/
+"SpotifyAuthTitle" = "Authenticate with the Spotify API";
+"ShareActionTitle" = "Share";
+"SettingsTitle" = "Settings";
+"SettingsSectionShareTitle" = "Share";
+"SettingsItemFormatPatternTitle" = "Specify the format pattern for sharing sentence";
+"SettingsItemFormatPatternModifierTitle" = "Specify the format pattern modifiers (prefix & suffix)";
+"SettingsDetailFormatPatternTitle" = "Specify the format pattern for sharing sentence";
+"SettingsDetailFormatPatternDescription" = "Song title: TI, Artist: AR, Album: AL, Spotify URL: SU, Line break: \\n, escape: surround by ''";
+"SettingsDetailFormatPatternHint" = "Input format pattern";
+"SettingsDetailFormatPatternModifierTitle" = "Specify prefix & suffix";
+"SettingsDetailFormatPatternModifierPrefixLabel" = "prefix";
+"SettingsDetailFormatPatternModifierSuffixLabel" = "suffix";

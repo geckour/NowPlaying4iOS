@@ -6,12 +6,21 @@
 //
 
 import SwiftUI
+import OAuthSwift
 
 @main
 struct NowPlaying4iOSApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onOpenURL { url in
+                    print(url)
+                    if url.scheme == "np4ios" && url.host == "spotify.callback" {
+                        OAuthSwift.handle(url: url)
+                    }
+                }
         }
     }
 }

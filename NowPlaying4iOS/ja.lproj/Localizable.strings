@@ -1,0 +1,19 @@
+/* 
+  Localizable.strings
+  NowPlaying4iOS
+
+  Created by geckour on 2023/04/16.
+  
+*/
+"SpotifyAuthTitle" = "Spotify API で認証する";
+"ShareActionTitle" = "共有";
+"SettingsTitle" = "設定";
+"SettingsSectionShareTitle" = "共有";
+"SettingsItemFormatPatternTitle" = "共有文のフォーマットを指定する";
+"SettingsItemFormatPatternModifierTitle" = "フォーマット指定子の修飾辞 (接頭辞・接尾辞) を指定する";
+"SettingsDetailFormatPatternTitle" = "共有文のフォーマットを指定する";
+"SettingsDetailFormatPatternDescription" = "曲名: TI, アーティスト: AR, アルバム: AL, Spotify URL: SU, 改行: \\n, エスケープ: '' で囲む";
+"SettingsDetailFormatPatternHint" = "フォーマットを入力";
+"SettingsDetailFormatPatternModifierTitle" = "接頭辞・接尾辞を指定";
+"SettingsDetailFormatPatternModifierPrefixLabel" = "接頭辞";
+"SettingsDetailFormatPatternModifierSuffixLabel" = "接尾辞";
