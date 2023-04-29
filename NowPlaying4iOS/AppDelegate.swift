@@ -22,7 +22,6 @@ class AppDelegate : NSObject, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        print(Bundle.main.infoDictionary?["ADMOB_APPLICATION_ID"] as? String ?? "")
         GADMobileAds.sharedInstance().start(completionHandler: nil)
         return true
     }

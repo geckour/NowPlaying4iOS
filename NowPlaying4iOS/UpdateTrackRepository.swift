@@ -184,5 +184,5 @@ struct SpotifyNowPlayingResult: Decodable {
 }
 
 enum NoContentError: Error {
-case spotify
+    case spotify
 }
