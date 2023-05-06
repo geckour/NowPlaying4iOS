@@ -54,14 +54,14 @@
 		07779B5129EC0C0E00266F87 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		07779B5529EC117800266F87 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		07779B5729EC118200266F87 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
-		07D3808529E84A48003376C1 /* NowPlaying4iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NowPlaying4iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		07D3808529E84A48003376C1 /* NP4i.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NP4i.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07D3808829E84A48003376C1 /* NowPlaying4iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlaying4iOSApp.swift; sourceTree = "<group>"; };
 		07D3808A29E84A48003376C1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		07D3808C29E84A49003376C1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		07D3808F29E84A49003376C1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		07D3809529E84A4A003376C1 /* NowPlaying4iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NowPlaying4iOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		07D3809529E84A4A003376C1 /* NP4iTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NP4iTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		07D3809929E84A4A003376C1 /* NowPlaying4iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlaying4iOSTests.swift; sourceTree = "<group>"; };
-		07D3809F29E84A4A003376C1 /* NowPlaying4iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NowPlaying4iOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		07D3809F29E84A4A003376C1 /* NP4iUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NP4iUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		07D380A329E84A4A003376C1 /* NowPlaying4iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlaying4iOSUITests.swift; sourceTree = "<group>"; };
 		07D380A529E84A4A003376C1 /* NowPlaying4iOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlaying4iOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -114,9 +114,9 @@
 		07D3808629E84A48003376C1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				07D3808529E84A48003376C1 /* NowPlaying4iOS.app */,
-				07D3809529E84A4A003376C1 /* NowPlaying4iOSTests.xctest */,
-				07D3809F29E84A4A003376C1 /* NowPlaying4iOSUITests.xctest */,
+				07D3808529E84A48003376C1 /* NP4i.app */,
+				07D3809529E84A4A003376C1 /* NP4iTests.xctest */,
+				07D3809F29E84A4A003376C1 /* NP4iUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -169,9 +169,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		07D3808429E84A48003376C1 /* NowPlaying4iOS */ = {
+		07D3808429E84A48003376C1 /* NP4i */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 07D380A929E84A4A003376C1 /* Build configuration list for PBXNativeTarget "NowPlaying4iOS" */;
+			buildConfigurationList = 07D380A929E84A4A003376C1 /* Build configuration list for PBXNativeTarget "NP4i" */;
 			buildPhases = (
 				07D3808129E84A48003376C1 /* Sources */,
 				07D3808229E84A48003376C1 /* Frameworks */,
@@ -181,18 +181,18 @@
 			);
 			dependencies = (
 			);
-			name = NowPlaying4iOS;
+			name = NP4i;
 			packageProductDependencies = (
 				076384CD29E87A15005DBD5A /* OAuthSwift */,
 				075B559C29EB393E004E02B3 /* GoogleMobileAds */,
 			);
 			productName = NowPlaying4iOS;
-			productReference = 07D3808529E84A48003376C1 /* NowPlaying4iOS.app */;
+			productReference = 07D3808529E84A48003376C1 /* NP4i.app */;
 			productType = "com.apple.product-type.application";
 		};
-		07D3809429E84A4A003376C1 /* NowPlaying4iOSTests */ = {
+		07D3809429E84A4A003376C1 /* NP4iTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 07D380AC29E84A4A003376C1 /* Build configuration list for PBXNativeTarget "NowPlaying4iOSTests" */;
+			buildConfigurationList = 07D380AC29E84A4A003376C1 /* Build configuration list for PBXNativeTarget "NP4iTests" */;
 			buildPhases = (
 				07D3809129E84A4A003376C1 /* Sources */,
 				07D3809229E84A4A003376C1 /* Frameworks */,
@@ -203,14 +203,14 @@
 			dependencies = (
 				07D3809729E84A4A003376C1 /* PBXTargetDependency */,
 			);
-			name = NowPlaying4iOSTests;
+			name = NP4iTests;
 			productName = NowPlaying4iOSTests;
-			productReference = 07D3809529E84A4A003376C1 /* NowPlaying4iOSTests.xctest */;
+			productReference = 07D3809529E84A4A003376C1 /* NP4iTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		07D3809E29E84A4A003376C1 /* NowPlaying4iOSUITests */ = {
+		07D3809E29E84A4A003376C1 /* NP4iUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 07D380AF29E84A4A003376C1 /* Build configuration list for PBXNativeTarget "NowPlaying4iOSUITests" */;
+			buildConfigurationList = 07D380AF29E84A4A003376C1 /* Build configuration list for PBXNativeTarget "NP4iUITests" */;
 			buildPhases = (
 				07D3809B29E84A4A003376C1 /* Sources */,
 				07D3809C29E84A4A003376C1 /* Frameworks */,
@@ -221,9 +221,9 @@
 			dependencies = (
 				07D380A129E84A4A003376C1 /* PBXTargetDependency */,
 			);
-			name = NowPlaying4iOSUITests;
+			name = NP4iUITests;
 			productName = NowPlaying4iOSUITests;
-			productReference = 07D3809F29E84A4A003376C1 /* NowPlaying4iOSUITests.xctest */;
+			productReference = 07D3809F29E84A4A003376C1 /* NP4iUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -249,7 +249,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 07D3808029E84A48003376C1 /* Build configuration list for PBXProject "NowPlaying4iOS" */;
+			buildConfigurationList = 07D3808029E84A48003376C1 /* Build configuration list for PBXProject "NP4i" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -267,9 +267,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				07D3808429E84A48003376C1 /* NowPlaying4iOS */,
-				07D3809429E84A4A003376C1 /* NowPlaying4iOSTests */,
-				07D3809E29E84A4A003376C1 /* NowPlaying4iOSUITests */,
+				07D3808429E84A48003376C1 /* NP4i */,
+				07D3809429E84A4A003376C1 /* NP4iTests */,
+				07D3809E29E84A4A003376C1 /* NP4iUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -340,12 +340,12 @@
 /* Begin PBXTargetDependency section */
 		07D3809729E84A4A003376C1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 07D3808429E84A48003376C1 /* NowPlaying4iOS */;
+			target = 07D3808429E84A48003376C1 /* NP4i */;
 			targetProxy = 07D3809629E84A4A003376C1 /* PBXContainerItemProxy */;
 		};
 		07D380A129E84A4A003376C1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 07D3808429E84A48003376C1 /* NowPlaying4iOS */;
+			target = 07D3808429E84A48003376C1 /* NP4i */;
 			targetProxy = 07D380A029E84A4A003376C1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -570,7 +570,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NowPlaying4iOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NowPlaying4iOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NP4i.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NP4i";
 			};
 			name = Debug;
 		};
@@ -589,7 +589,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NowPlaying4iOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NowPlaying4iOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NP4i.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NP4i";
 			};
 			name = Release;
 		};
@@ -630,7 +630,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		07D3808029E84A48003376C1 /* Build configuration list for PBXProject "NowPlaying4iOS" */ = {
+		07D3808029E84A48003376C1 /* Build configuration list for PBXProject "NP4i" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				07D380A729E84A4A003376C1 /* Debug */,
@@ -639,7 +639,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		07D380A929E84A4A003376C1 /* Build configuration list for PBXNativeTarget "NowPlaying4iOS" */ = {
+		07D380A929E84A4A003376C1 /* Build configuration list for PBXNativeTarget "NP4i" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				07D380AA29E84A4A003376C1 /* Debug */,
@@ -648,7 +648,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		07D380AC29E84A4A003376C1 /* Build configuration list for PBXNativeTarget "NowPlaying4iOSTests" */ = {
+		07D380AC29E84A4A003376C1 /* Build configuration list for PBXNativeTarget "NP4iTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				07D380AD29E84A4A003376C1 /* Debug */,
@@ -657,7 +657,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		07D380AF29E84A4A003376C1 /* Build configuration list for PBXNativeTarget "NowPlaying4iOSUITests" */ = {
+		07D380AF29E84A4A003376C1 /* Build configuration list for PBXNativeTarget "NP4iUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				07D380B029E84A4A003376C1 /* Debug */,

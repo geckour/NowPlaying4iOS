@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "07D3808429E84A48003376C1"
-               BuildableName = "NowPlaying4iOS.app"
-               BlueprintName = "NowPlaying4iOS"
-               ReferencedContainer = "container:NowPlaying4iOS.xcodeproj">
+               BuildableName = "NP4i.app"
+               BlueprintName = "NP4i"
+               ReferencedContainer = "container:NP4i.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,9 +35,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "07D3809429E84A4A003376C1"
-               BuildableName = "NowPlaying4iOSTests.xctest"
-               BlueprintName = "NowPlaying4iOSTests"
-               ReferencedContainer = "container:NowPlaying4iOS.xcodeproj">
+               BuildableName = "NP4iTests.xctest"
+               BlueprintName = "NP4iTests"
+               ReferencedContainer = "container:NP4i.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -46,9 +46,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "07D3809E29E84A4A003376C1"
-               BuildableName = "NowPlaying4iOSUITests.xctest"
-               BlueprintName = "NowPlaying4iOSUITests"
-               ReferencedContainer = "container:NowPlaying4iOS.xcodeproj">
+               BuildableName = "NP4iUITests.xctest"
+               BlueprintName = "NP4iUITests"
+               ReferencedContainer = "container:NP4i.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -68,9 +68,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "07D3808429E84A48003376C1"
-            BuildableName = "NowPlaying4iOS.app"
-            BlueprintName = "NowPlaying4iOS"
-            ReferencedContainer = "container:NowPlaying4iOS.xcodeproj">
+            BuildableName = "NP4i.app"
+            BlueprintName = "NP4i"
+            ReferencedContainer = "container:NP4i.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -85,9 +85,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "07D3808429E84A48003376C1"
-            BuildableName = "NowPlaying4iOS.app"
-            BlueprintName = "NowPlaying4iOS"
-            ReferencedContainer = "container:NowPlaying4iOS.xcodeproj">
+            BuildableName = "NP4i.app"
+            BlueprintName = "NP4i"
+            ReferencedContainer = "container:NP4i.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
