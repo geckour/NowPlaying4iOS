@@ -8,17 +8,19 @@
 import SwiftUI
 
 let SETTINGS_KEY_FORMAT_STRING = "settings_key_format_string"
-let SETTINGS_DEFAULT_FORMAT_STRING = "#NowPlaying TI - AR (AL)"
 let SETTINGS_KEY_FORMAT_MODIFIERS = "settings_key_format_modifiers"
+let SETTINGS_KEY_ATTACH_ARTWORK = "settings_key_attach_artwork"
+let SETTINGS_DEFAULT_FORMAT_STRING = "#NowPlaying TI - AR (AL)"
 
 struct SettingsView: View {
     @Binding var formatString: String
     @Binding var modifiers: [FormatPatternModifier]
+    @Binding var attachArtwork: Bool
     
     var body: some View {
         NavigationStack {
             Form {
-                Section(LocalizedStringKey("SettingsSectionShareTitle")) {
+                Text(LocalizedStringKey("SettingsSectionShareTitle"))
                     NavigationLink(destination: SettingsSentenceFormatView(formatString: $formatString)) {
                         HStack {
                             Text(LocalizedStringKey("SettingsItemFormatPatternTitle"))
@@ -29,7 +31,12 @@ struct SettingsView: View {
                             Text(LocalizedStringKey("SettingsItemFormatPatternModifierTitle"))
                         }
                     }
-                }
+                    HStack {
+                        Toggle(LocalizedStringKey("SettingsItemSwitchAttachArtworkTItle"), isOn: $attachArtwork)
+                            .onChange(of: attachArtwork) {
+                                UserDefaults.standard.set($0, forKey: SETTINGS_KEY_ATTACH_ARTWORK)
+                            }
+                    }
             }
             .navigationTitle(LocalizedStringKey("SettingsTitle"))
             .navigationBarTitleDisplayMode(.large)

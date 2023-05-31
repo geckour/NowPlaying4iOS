@@ -20,11 +20,12 @@ struct ContentView: View {
         .map {
             try! JSONDecoder().decode([FormatPatternModifier].self, from: $0)
         } ?? getReplaceablePatterns().map { FormatPatternModifier(id: $0) }
+    @State private var attachArtwork = (UserDefaults.standard.object(forKey: SETTINGS_KEY_ATTACH_ARTWORK) != nil) ? UserDefaults.standard.bool(forKey: SETTINGS_KEY_ATTACH_ARTWORK) : true
     
     var body: some View {
         return NavigationStack {
             VStack(alignment: .leading) {
-                NavigationLink(destination: SettingsView(formatString: $formatString, modifiers: $modifiers)) {
+                NavigationLink(destination: SettingsView(formatString: $formatString, modifiers: $modifiers, attachArtwork: $attachArtwork)) {
                     Image(systemName: "gearshape").imageScale(.large)
                 }
                 GeometryReader { geometry in
@@ -48,7 +49,7 @@ struct ContentView: View {
                             }
                             .padding(.top, 20)
                             .sheet(isPresented: $isPresentActivityController) {
-                                ShareSheet(activityItems: track.getItem(), applicationActivities: nil)
+                                ShareSheet(activityItems: track.getItem(attachArtwork: attachArtwork), applicationActivities: nil)
                                     .presentationDetents([.medium])
                             }
                         }
@@ -126,24 +127,28 @@ class Track: ObservableObject {
         )
     }
     
-    func getItem() -> [Any] {
-        var item: [Any] = [getMetadataItemSource(), shareText]
-        if let artwork = artwork {
-            item.append(artwork)
+    func getItem(attachArtwork: Bool) -> [Any] {
+        var item: [Any] = [getMetadataItemSource(attachArtwork: attachArtwork), shareText]
+        if (attachArtwork) {
+            if let artwork = artwork {
+                item.append(artwork)
+            }
         }
         return item
     }
     
-    private func getMetadataItemSource() -> ShareActivityItemSource {
+    private func getMetadataItemSource(attachArtwork: Bool) -> ShareActivityItemSource {
         let metadata = LPLinkMetadata()
         metadata.title = shareText
-        if let artwork = artwork {
-            metadata.iconProvider = NSItemProvider(
-                contentsOf: ShareActivityItemSource.createLocalImageUrl(
-                    image: artwork,
-                    forImageNamed: "artwork"
+        if (attachArtwork) {
+            if let artwork = artwork {
+                metadata.iconProvider = NSItemProvider(
+                    contentsOf: ShareActivityItemSource.createLocalImageUrl(
+                        image: artwork,
+                        forImageNamed: "artwork"
+                    )
                 )
-            )
+            }
         }
         return ShareActivityItemSource(linkMetadata: metadata)
     }

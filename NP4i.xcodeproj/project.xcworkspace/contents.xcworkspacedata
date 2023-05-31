@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/geckour/develop/git/Xcode/NowPlaying4iOS/NP4i.xcodeproj">
+      location = "self:">
    </FileRef>
 </Workspace>
