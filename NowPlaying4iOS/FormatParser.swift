@@ -115,6 +115,8 @@ class FormatParser {
                     result = track.composer?.withModifiers(modifiers: modifiers, identifier: FormatPattern.COMPOSER) ?? ""
                 case FormatPattern.SPOTIFY_URL.rawValue:
                     result = track.spotifyUrl?.withModifiers(modifiers: modifiers, identifier: FormatPattern.SPOTIFY_URL) ?? ""
+                case FormatPattern.APPLE_MUSIC_URL.rawValue:
+                    result = track.appleMusicUrl?.withModifiers(modifiers: modifiers, identifier: FormatPattern.APPLE_MUSIC_URL) ?? ""
                 case FormatPattern.NEW_LINE.rawValue:
                     result = "\n"
                 default:
@@ -134,6 +136,7 @@ enum FormatPattern: String, CaseIterable, Encodable, Decodable {
     case ALBUM = "AL"
     case COMPOSER = "CO"
     case SPOTIFY_URL = "SU"
+    case APPLE_MUSIC_URL = "AU"
     case NEW_LINE = "\\n"
 }
 

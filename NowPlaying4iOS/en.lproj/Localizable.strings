@@ -12,7 +12,7 @@
 "SettingsItemFormatPatternTitle" = "Specify the format pattern for sharing sentence";
 "SettingsItemFormatPatternModifierTitle" = "Specify the format pattern modifiers (prefix & suffix)";
 "SettingsDetailFormatPatternTitle" = "Specify the format pattern for sharing sentence";
-"SettingsDetailFormatPatternDescription" = "Song title: TI, Artist: AR, Album: AL, Spotify URL: SU, Line break: \\n, escape: surround by ''";
+"SettingsDetailFormatPatternDescription" = "Song title: TI, Artist: AR, Album: AL, Composer: CO, Spotify URL: SU, Apple Music URL: AU, Line break: \\n, escape: surround by ''";
 "SettingsDetailFormatPatternHint" = "Input format pattern";
 "SettingsDetailFormatPatternModifierTitle" = "Specify prefix & suffix";
 "SettingsDetailFormatPatternModifierPrefixLabel" = "prefix";

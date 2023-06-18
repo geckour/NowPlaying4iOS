@@ -12,7 +12,7 @@
 "SettingsItemFormatPatternTitle" = "共有文のフォーマットを指定する";
 "SettingsItemFormatPatternModifierTitle" = "フォーマット指定子の修飾辞 (接頭辞・接尾辞) を指定する";
 "SettingsDetailFormatPatternTitle" = "共有文のフォーマットを指定する";
-"SettingsDetailFormatPatternDescription" = "曲名: TI, アーティスト: AR, アルバム: AL, Spotify URL: SU, 改行: \\n, エスケープ: '' で囲む";
+"SettingsDetailFormatPatternDescription" = "曲名: TI, アーティスト: AR, アルバム: AL, 作曲者: CO, Spotify URL: SU, Apple Music URL: AU, 改行: \\n, エスケープ: '' で囲む";
 "SettingsDetailFormatPatternHint" = "フォーマットを入力";
 "SettingsDetailFormatPatternModifierTitle" = "接頭辞・接尾辞を指定";
 "SettingsDetailFormatPatternModifierPrefixLabel" = "接頭辞";

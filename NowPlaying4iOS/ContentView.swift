@@ -82,6 +82,7 @@ class Track: ObservableObject {
     var album: String
     var composer: String?
     var spotifyUrl: String?
+    var appleMusicUrl: String?
     
     @Published var artwork: UIImage?
     @Published var shareText: String
@@ -104,7 +105,9 @@ class Track: ObservableObject {
         album: String,
         composer: String? = nil,
         spotifyUrl: String? = nil,
+        appleMusicUrl: String? = nil,
         artwork: UIImage? = nil,
+        artworkURL: URL? = nil,
         modifiers: [FormatPatternModifier]
     ) {
         self.title = title
@@ -112,8 +115,27 @@ class Track: ObservableObject {
         self.album = album
         self.composer = composer
         self.spotifyUrl = spotifyUrl
+        self.appleMusicUrl = appleMusicUrl
         self.artwork = artwork
+        if let artworkURL = artworkURL {
+            updateArtworkWithURL(url: artworkURL)
+        }
         updateShareText(modifiers: modifiers)
+    }
+    
+    private func updateArtworkWithURL(url: URL) {
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                if let error = error {
+                    print(error.localizedDescription)
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.artwork = UIImage(data: data)
+            }
+        }.resume()
     }
     
     private func updateShareText(modifiers: [FormatPatternModifier]) {

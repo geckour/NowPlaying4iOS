@@ -9,6 +9,7 @@ import Foundation
 import OAuthSwift
 import SwiftUI
 import MediaPlayer
+import MusicKit
 
 class UpdateTrackRepository {
     
@@ -145,20 +146,134 @@ class UpdateTrackRepository {
     }
     
     func updateWithLocalAppleMusic(track: Track, modifiers: [FormatPatternModifier]) {
-        let item = MPMusicPlayerController.systemMusicPlayer.nowPlayingItem
-        var artwork: UIImage? = nil
-        if let a = item?.artwork {
-            artwork = a.image(at: a.bounds.size)
-        }
-        DispatchQueue.main.async {
-            track.update(
-                title: item?.title ?? "",
-                artist: item?.artist ?? "",
-                album: item?.albumTitle ?? "",
-                composer: item?.composer,
-                artwork: artwork,
-                modifiers: modifiers
-            )
+        if let item = MPMusicPlayerController.systemMusicPlayer.nowPlayingItem {
+            if let a = item.artwork {
+                let artwork = a.image(at: a.bounds.size)
+                
+                if (item.playbackStoreID == "0") {
+                    DispatchQueue.main.async {
+                        track.update(
+                            title: item.title ?? "",
+                            artist: item.artist ?? "",
+                            album: item.albumTitle ?? "",
+                            composer: item.composer,
+                            artwork: artwork,
+                            modifiers: modifiers
+                        )
+                    }
+                    return
+                }
+                
+                Task {
+                    do {
+                        print(item.playbackStoreID)
+                        let request = MusicCatalogResourceRequest<Song>(matching: \.id, equalTo: MusicItemID(item.playbackStoreID))
+                        let response = try await request.response()
+                        
+                        if let song = response.items.first {
+                            if let a2 = song.artwork {
+                                let artworkURL = a2.url(width: a2.maximumWidth, height: a2.maximumHeight)!
+                                
+                                DispatchQueue.main.async {
+                                    track.update(
+                                        title: song.title,
+                                        artist: song.artistName,
+                                        album: song.albumTitle ?? "",
+                                        composer: song.composerName,
+                                        appleMusicUrl: song.url?.string,
+                                        artworkURL: artworkURL,
+                                        modifiers: modifiers
+                                    )
+                                }
+                            }
+                            DispatchQueue.main.async {
+                                track.update(
+                                    title: song.title,
+                                    artist: song.artistName,
+                                    album: song.albumTitle ?? "",
+                                    composer: song.composerName,
+                                    appleMusicUrl: song.url?.string,
+                                    artwork: artwork,
+                                    modifiers: modifiers
+                                )
+                            }
+                            return
+                        } else {
+                            DispatchQueue.main.async {
+                                track.update(
+                                    title: item.title ?? "",
+                                    artist: item.artist ?? "",
+                                    album: item.albumTitle ?? "",
+                                    composer: item.composer,
+                                    artwork: artwork,
+                                    modifiers: modifiers
+                                )
+                            }
+                        }
+                    } catch {
+                        DispatchQueue.main.async {
+                            track.update(
+                                title: item.title ?? "",
+                                artist: item.artist ?? "",
+                                album: item.albumTitle ?? "",
+                                composer: item.composer,
+                                artwork: artwork,
+                                modifiers: modifiers
+                            )
+                        }
+                    }
+                }
+            } else {
+                Task {
+                    do {
+                        let request = MusicCatalogResourceRequest<Song>(matching: \.id, equalTo: MusicItemID(item.playbackStoreID))
+                        let response = try await request.response()
+                        
+                        if let song = response.items.first {
+                            DispatchQueue.main.async {
+                                track.update(
+                                    title: item.title ?? "",
+                                    artist: item.artist ?? "",
+                                    album: item.albumTitle ?? "",
+                                    composer: item.composer,
+                                    appleMusicUrl: song.title,
+                                    modifiers: modifiers
+                                )
+                            }
+                            return
+                        } else {
+                            DispatchQueue.main.async {
+                                track.update(
+                                    title: item.title ?? "",
+                                    artist: item.artist ?? "",
+                                    album: item.albumTitle ?? "",
+                                    composer: item.composer,
+                                    modifiers: modifiers
+                                )
+                            }
+                        }
+                    } catch {
+                        DispatchQueue.main.async {
+                            track.update(
+                                title: item.title ?? "",
+                                artist: item.artist ?? "",
+                                album: item.albumTitle ?? "",
+                                composer: item.composer,
+                                modifiers: modifiers
+                            )
+                        }
+                    }
+                }
+            }
+        } else {
+            DispatchQueue.main.async {
+                track.update(
+                    title: "",
+                    artist: "",
+                    album: "",
+                    modifiers: modifiers
+                )
+            }
         }
     }
 }
