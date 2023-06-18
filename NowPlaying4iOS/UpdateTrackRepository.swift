@@ -56,6 +56,7 @@ class UpdateTrackRepository {
             URLSession.shared.dataTask(with: request) { data, response, error in
                 if let error = error {
                     print(error.localizedDescription)
+                    self.updateWithLocalAppleMusic(track: track, modifiers: modifiers)
                 } else {
                     if let statusCode = (response as? HTTPURLResponse)?.statusCode {
                         print(statusCode)
@@ -63,7 +64,8 @@ class UpdateTrackRepository {
                         case 2:
                             do {
                                 if (statusCode == 204) {
-                                    throw NoContentError.spotify
+                                    print(NoContentError.spotify.localizedDescription)
+                                    self.updateWithLocalAppleMusic(track: track, modifiers: modifiers)
                                 } else {
                                     if let data = data {
                                         let spotifyResult = try JSONDecoder().decode(SpotifyNowPlayingResult.self, from: data)
@@ -111,6 +113,7 @@ class UpdateTrackRepository {
                                                 return
                                             case .failure(let error):
                                                 print(error.localizedDescription)
+                                                self.updateWithLocalAppleMusic(track: track, modifiers: modifiers)
                                             }
                                         }
                                     }
@@ -122,22 +125,8 @@ class UpdateTrackRepository {
                             }
                         }
                     }
-                }
-                
-                let item = MPMusicPlayerController.systemMusicPlayer.nowPlayingItem
-                var artwork: UIImage? = nil
-                if let a = item?.artwork {
-                    artwork = a.image(at: a.bounds.size)
-                }
-                DispatchQueue.main.async {
-                    track.update(
-                        title: item?.title ?? "",
-                        artist: item?.artist ?? "",
-                        album: item?.albumTitle ?? "",
-                        composer: item?.composer,
-                        artwork: artwork,
-                        modifiers: modifiers
-                    )
+                    
+                    self.updateWithLocalAppleMusic(track: track, modifiers: modifiers)
                 }
             }.resume()
         }
@@ -153,6 +142,24 @@ class UpdateTrackRepository {
         KeyChainRepository.standard.deleteFromKeyChain(service: "oauth-token", account: "spotify")
         KeyChainRepository.standard.deleteFromKeyChain(service: "refresh-token", account: "spotify")
         UserDefaults.standard.removeObject(forKey: "token-expires-at")
+    }
+    
+    func updateWithLocalAppleMusic(track: Track, modifiers: [FormatPatternModifier]) {
+        let item = MPMusicPlayerController.systemMusicPlayer.nowPlayingItem
+        var artwork: UIImage? = nil
+        if let a = item?.artwork {
+            artwork = a.image(at: a.bounds.size)
+        }
+        DispatchQueue.main.async {
+            track.update(
+                title: item?.title ?? "",
+                artist: item?.artist ?? "",
+                album: item?.albumTitle ?? "",
+                composer: item?.composer,
+                artwork: artwork,
+                modifiers: modifiers
+            )
+        }
     }
 }
 
