@@ -10,40 +10,57 @@ import OAuthSwift
 import SwiftUI
 import MediaPlayer
 import MusicKit
+import AuthenticationServices
 
-class UpdateTrackRepository {
+class UpdateTrackRepository: NSObject {
     
     static let standard = UpdateTrackRepository()
     
-    private let oauthswift = OAuth2Swift(
-        consumerKey: Bundle.main.infoDictionary?["SPOTIFY_CLIENT_KEY"] as? String ?? "",
-        consumerSecret: Bundle.main.infoDictionary?["SPOTIFY_CLIENT_SECRET"] as? String ?? "",
-        authorizeUrl: "https://accounts.spotify.com/authorize",
-        accessTokenUrl: "https://accounts.spotify.com/api/token",
-        responseType: "code"
-    )
+    let clientId = Bundle.main.infoDictionary?["SPOTIFY_CLIENT_KEY"] as? String ?? ""
+    let clientSecret = Bundle.main.infoDictionary?["SPOTIFY_CLIENT_SECRET"] as? String ?? ""
     
-    init() {
-        oauthswift.accessTokenBasicAuthentification = true
-    }
-    
-    func authorize(track: Track, modifiers: [FormatPatternModifier]) {
-        oauthswift.authorize(
-            withCallbackURL: URL(string: "np4ios://spotify.callback"),
-            scope: "user-read-private%20user-read-playback-state",
-            state: generateState(withLength: 20)
-        ) { result in
-            switch result {
-            case .success(let (credential, _, _)):
-                self.saveCredentials(credential: credential)
-                self.updateWithSpotify(track: track, modifiers: modifiers)
-            case .failure(let error):
-                print(error.localizedDescription)
+    func authorizeWithSpotify(track: Track, modifiers: [FormatPatternModifier], completion: @escaping (Result<SpotifyOAuthToken, Error>) -> Void) {
+        let urlString = "https://accounts.spotify.com/authorize?response_type=code&client_id=\(clientId)&scope=user-read-currently-playing&redirect_uri=np4ios%3A%2F%2Fspotify.callback&state=\(self.generateState(withLength: 16))"
+        let authenticationSession = ASWebAuthenticationSession(
+            url: URL(string: urlString)!,
+            callbackURLScheme: nil
+        ) { url, error in
+            if let error = error {
+                completion(.failure(error))
+            }
+            if let url = url {
+                guard let code = URLComponents(url: url, resolvingAgainstBaseURL: true)?.queryItems?.first(where: { URLQueryItem in
+                    URLQueryItem.name == "code"
+                })?.value else {
+                    return
+                }
+                let authorizationHeaderValue = "\(self.clientId):\(self.clientSecret)".data(using: .utf8)!.base64EncodedString()
+                var request = URLRequest(url: URL(string: "https://accounts.spotify.com/api/token")!)
+                request.httpMethod = "POST"
+                request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
+                request.setValue("Basic \(authorizationHeaderValue)", forHTTPHeaderField:"Authorization")
+                request.httpBody = "code=\(code)&redirect_uri=np4ios%3A%2F%2Fspotify.callback&grant_type=authorization_code".data(using: .utf8)
+                URLSession.shared.dataTask(with: request) { data, response, error in
+                    if let error = error {
+                        completion(.failure(error))
+                    }
+                    if let data = data {
+                        do {
+                            let token = try JSONDecoder().decode(SpotifyOAuthToken.self, from: data)
+                            completion(.success(token))
+                        } catch {
+                            completion(.failure(error))
+                        }
+                    }
+                }.resume()
             }
         }
+        authenticationSession.presentationContextProvider = self
+        authenticationSession.prefersEphemeralWebBrowserSession = true
+        authenticationSession.start()
     }
     
-    func updateWithSpotify(track: Track, modifiers: [FormatPatternModifier]) {
+    func updateWithSpotify(track: Track, modifiers: [FormatPatternModifier], authorizeCompletion: @escaping (Result<SpotifyOAuthToken, Error>) -> Void, requestCompletion: @escaping (Error?) -> Void) {
         if let tokenData = KeyChainRepository.standard.getFromKeyChainOrNull(service: "oauth-token", account: "spotify") {
             let token = String(data: tokenData, encoding: .utf8)!
             var request = URLRequest(url: URL(string: "https://api.spotify.com/v1/me/player")!)
@@ -56,87 +73,115 @@ class UpdateTrackRepository {
             ]
             URLSession.shared.dataTask(with: request) { data, response, error in
                 if let error = error {
-                    print(error.localizedDescription)
+                    requestCompletion(error)
                     self.updateWithLocalAppleMusic(track: track, modifiers: modifiers)
-                } else {
-                    if let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                        print(statusCode)
-                        switch statusCode / 100 {
-                        case 2:
+                    return
+                }
+                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                    print(statusCode)
+                    if (statusCode == 204) {
+                        requestCompletion(NoContentError())
+                        self.updateWithLocalAppleMusic(track: track, modifiers: modifiers)
+                        return
+                    }
+                    if (statusCode == 200) {
+                        if let data = data {
                             do {
-                                if (statusCode == 204) {
-                                    print(NoContentError.spotify.localizedDescription)
-                                    self.updateWithLocalAppleMusic(track: track, modifiers: modifiers)
-                                } else {
-                                    if let data = data {
-                                        let spotifyResult = try JSONDecoder().decode(SpotifyNowPlayingResult.self, from: data)
-                                        DispatchQueue.main.async {
-                                            track.update(
-                                                title: spotifyResult.item.name,
-                                                artist: spotifyResult.item.artists.map { artist in artist.name }.joined(separator: ", "),
-                                                album: spotifyResult.item.album.name,
-                                                spotifyUrl: spotifyResult.item.external_urls["spotify"],
-                                                modifiers: modifiers
-                                            )
-                                        }
-                                        
-                                        URLSession.shared.dataTask(with: URL(string: spotifyResult.item.album.images.first!.url)!) { data, response, error in
-                                            if let data = data {
-                                                DispatchQueue.main.async {
-                                                    track.update(
-                                                        title: spotifyResult.item.name,
-                                                        artist: spotifyResult.item.artists.map { artist in artist.name }.joined(separator: ", "),
-                                                        album: spotifyResult.item.album.name,
-                                                        spotifyUrl: spotifyResult.item.external_urls["spotify"],
-                                                        artwork: UIImage(data: data),
-                                                        modifiers: modifiers
-                                                    )
-                                                }
-                                            }
-                                        }.resume()
-                                        return
+                                let spotifyResult = try JSONDecoder().decode(SpotifyNowPlayingResult.self, from: data)
+                                requestCompletion(nil)
+                                if let spotifyTrack = spotifyResult.item {
+                                    DispatchQueue.main.async {
+                                        track.update(
+                                            title: spotifyTrack.name,
+                                            artist: spotifyTrack.artists.map { artist in artist.name }.joined(separator: ", "),
+                                            album: spotifyTrack.album.name,
+                                            spotifyUrl: spotifyTrack.external_urls.spotify,
+                                            modifiers: modifiers
+                                        )
                                     }
+                                    
+                                    URLSession.shared.dataTask(with: URL(string: spotifyTrack.album.images.first!.url)!) { data, response, error in
+                                        if let data = data {
+                                            DispatchQueue.main.async {
+                                                track.update(
+                                                    title: spotifyTrack.name,
+                                                    artist: spotifyTrack.artists.map { artist in artist.name }.joined(separator: ", "),
+                                                    album: spotifyTrack.album.name,
+                                                    spotifyUrl: spotifyTrack.external_urls.spotify,
+                                                    artwork: UIImage(data: data),
+                                                    modifiers: modifiers
+                                                )
+                                            }
+                                        }
+                                    }.resume()
+                                } else {
+                                    requestCompletion(NoContentError())
+                                    return
                                 }
                             } catch {
-                                print(error.localizedDescription)
+                                requestCompletion(error)
+                                return
                             }
+                        } else {
+                            requestCompletion(NoContentError())
                             return
-                        default:
-                            if (UserDefaults.standard.object(forKey: "token-expires-at") != nil) {
-                                let expiresAt = UserDefaults.standard.double(forKey: "token-expires-at") as TimeInterval
-                                if let refreshTokenData = KeyChainRepository.standard.getFromKeyChainOrNull(service: "refresh-token", account: "spotify") {
-                                    if (Date(timeIntervalSince1970: expiresAt).timeIntervalSinceNow < 0) {
-                                        self.oauthswift.renewAccessToken(withRefreshToken: String(data: refreshTokenData, encoding: .utf8)!) { result in
-                                            switch result {
-                                            case .success(let (credential, _, _)):
-                                                self.saveCredentials(credential: credential)
-                                                self.updateWithSpotify(track: track, modifiers: modifiers)
-                                                return
-                                            case .failure(let error):
-                                                print(error.localizedDescription)
-                                                self.updateWithLocalAppleMusic(track: track, modifiers: modifiers)
-                                            }
+                        }
+                        return
+                    }
+                    if (UserDefaults.standard.object(forKey: "token-expires-at") != nil) {
+                        let expiresAt = UserDefaults.standard.double(forKey: "token-expires-at") as TimeInterval
+                        if let refreshTokenData = KeyChainRepository.standard.getFromKeyChainOrNull(service: "refresh-token", account: "spotify") {
+                            if (Date(timeIntervalSince1970: expiresAt).timeIntervalSinceNow < 0) {
+                                let refreshToken = String(data: refreshTokenData, encoding: .utf8)!
+                                let authorizationHeaderValue = "\(self.clientId):\(self.clientSecret)".data(using: .utf8)!.base64EncodedString()
+                                var request = URLRequest(url: URL(string: "https://accounts.spotify.com/api/token")!)
+                                request.httpMethod = "POST"
+                                request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
+                                request.setValue("Basic \(authorizationHeaderValue)", forHTTPHeaderField:"Authorization")
+                                request.httpBody = "refresh_token=\(refreshToken)&grant_type=refresh_token".data(using: .utf8)
+                                URLSession.shared.dataTask(with: request) { data, response, error in
+                                    if let error = error {
+                                        authorizeCompletion(.failure(error))
+                                        self.updateWithLocalAppleMusic(track: track, modifiers: modifiers)
+                                    }
+                                    if let data = data {
+                                        do {
+                                            let token = try JSONDecoder().decode(SpotifyOAuthToken.self, from: data)
+                                            authorizeCompletion(.success(token))
+                                            return
+                                        } catch {
+                                            authorizeCompletion(.failure(error))
+                                            self.updateWithLocalAppleMusic(track: track, modifiers: modifiers)
+                                            return
                                         }
                                     }
-                                }
-                            }
-                            if (statusCode == 401) {
-                                self.clearCredentials()
-                                self.authorize(track: track, modifiers: modifiers)
+                                }.resume()
+                                return
                             }
                         }
                     }
-                    
-                    self.updateWithLocalAppleMusic(track: track, modifiers: modifiers)
                 }
             }.resume()
+        } else {
+            self.authorizeWithSpotify(track: track, modifiers: modifiers, completion: authorizeCompletion)
         }
     }
     
-    func saveCredentials(credential: OAuthSwiftCredential) {
-        let _ = KeyChainRepository.standard.setIntoKeyChain(value: credential.oauthToken, service: "oauth-token", account: "spotify")
-        let _ = KeyChainRepository.standard.setIntoKeyChain(value: credential.oauthRefreshToken, service: "refresh-token", account: "spotify")
-        UserDefaults.standard.set(credential.oauthTokenExpiresAt?.timeIntervalSince1970, forKey: "token-expires-at")
+    func saveCredentials(token: SpotifyOAuthToken) -> (success: Bool, service: String?) {
+        var result: (Bool, String?) = (true, nil)
+        let successOAuth = KeyChainRepository.standard.setIntoKeyChain(value: token.access_token, service: "oauth-token", account: "spotify")
+        if (!successOAuth) {
+            result = (false, "oauth-token")
+        }
+        if let refreshToken = token.refresh_token {
+            let successRefresh = KeyChainRepository.standard.setIntoKeyChain(value: refreshToken, service: "refresh-token", account: "spotify")
+            if (!successRefresh) {
+                result = (false, "refresh-token")
+            }
+        }
+        UserDefaults.standard.set(token.expires_in, forKey: "token-expires-at")
+        
+        return result
     }
     
     func clearCredentials() {
@@ -276,17 +321,50 @@ class UpdateTrackRepository {
             }
         }
     }
+    
+    private  func generateState(withLength len: Int) -> String {
+        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let length = UInt32(letters.count)
+        
+        var randomString = ""
+        for _ in 0..<len {
+            let rand = arc4random_uniform(length)
+            let idx = letters.index(letters.startIndex, offsetBy: Int(rand))
+            let letter = letters[idx]
+            randomString += String(letter)
+        }
+        return randomString
+    }
+}
+
+@available(iOS 13.0, *)
+extension UpdateTrackRepository: ASWebAuthenticationPresentationContextProviding {
+    
+    @MainActor
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        return UIApplication.shared.windows.first { $0.isKeyWindow } ?? ASPresentationAnchor()
+    }
+}
+
+struct SpotifyOAuthToken: Decodable {
+    let access_token: String
+    let expires_in: Int
+    let refresh_token: String?
 }
 
 struct SpotifyNowPlayingResult: Decodable {
-    let item: SpotifyTrack
+    let item: SpotifyTrack?
     
     struct SpotifyTrack: Decodable {
         let id: String
-        let external_urls: [String:String]
+        let external_urls: SpotifyExternalUrl
         let name: String
         let album: SpotifyAlbum
         let artists: [SpotifyArtist]
+        
+        struct SpotifyExternalUrl: Decodable {
+            let spotify: String
+        }
         
         struct SpotifyAlbum: Decodable {
             let name: String
@@ -295,8 +373,6 @@ struct SpotifyNowPlayingResult: Decodable {
         
         struct SpotifyImage: Decodable {
             let url: String
-            let height: Int
-            let width: Int
         }
         
         struct SpotifyArtist: Decodable {
@@ -305,6 +381,10 @@ struct SpotifyNowPlayingResult: Decodable {
     }
 }
 
-enum NoContentError: Error {
-    case spotify
+struct NoContentError: LocalizedError {
+    var errorDescription: String = "No content has been playing on Spotify."
+}
+
+enum CustomError: Error {
+    case messageError(String)
 }
