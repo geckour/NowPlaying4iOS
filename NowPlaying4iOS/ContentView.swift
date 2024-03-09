@@ -8,7 +8,7 @@
 import SwiftUI
 import OAuthSwift
 import LinkPresentation
-import GoogleMobileAds
+//import GoogleMobileAds
 
 struct ContentView: View {
     @State private var alertDetail: AlertDetail? = nil
@@ -94,8 +94,8 @@ struct ContentView: View {
                         requestCompletion: onCompleteRequestSpotify
                     )
                 }
-                AdMobBannerView()
-                    .frame(height: GADAdSizeBanner.size.height)
+//                AdMobBannerView()
+//                    .frame(height: GADAdSizeBanner.size.height)
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
