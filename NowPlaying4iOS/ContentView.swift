@@ -53,6 +53,7 @@ struct ContentView: View {
                                     HStack {
                                         Spacer()
                                         Image("Spotify_Icon", label: Text("Spotify icon"))
+                                            .interpolation(.high)
                                             .resizable()
                                             .scaledToFit()
                                             .frame(maxWidth: 24)
@@ -86,14 +87,33 @@ struct ContentView: View {
                     }
                 }
                 .refreshable {
-                    UpdateTrackRepository.standard.updateWithSpotify(track: track, modifiers: modifiers, authorizeCompletion: onCompleteAuthorizationWithSpotify, requestCompletion: onCompleteRequestSpotify)
+                    UpdateTrackRepository.standard.updateWithSpotify(
+                        track: track,
+                        modifiers: modifiers,
+                        authorizeCompletion: onCompleteAuthorizationWithSpotify,
+                        requestCompletion: onCompleteRequestSpotify
+                    )
                 }
                 AdMobBannerView()
                     .frame(height: GADAdSizeBanner.size.height)
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .onAppear(perform: { UpdateTrackRepository.standard.updateWithSpotify(track: track, modifiers: modifiers, authorizeCompletion: onCompleteAuthorizationWithSpotify, requestCompletion: onCompleteRequestSpotify) })
+            .onAppear(perform: {
+                NotificationCenter.default
+                    .addObserver(
+                        forName: UIApplication.didBecomeActiveNotification,
+                        object: nil,
+                        queue: nil
+                    ) { notification in
+                        UpdateTrackRepository.standard.updateWithSpotify(
+                            track: track,
+                            modifiers: modifiers,
+                            authorizeCompletion: onCompleteAuthorizationWithSpotify,
+                            requestCompletion: onCompleteRequestSpotify
+                        )
+                    }
+            })
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .alert(alertDetail == nil ? "" : alertDetail!.title, isPresented: isAlertPresented, presenting: alertDetail) { detail in
@@ -122,7 +142,12 @@ struct ContentView: View {
                 UpdateTrackRepository.standard.clearCredentials()
                 let saveCredentialsResult = UpdateTrackRepository.standard.saveCredentials(token: token)
                 if (saveCredentialsResult.success) {
-                    UpdateTrackRepository.standard.updateWithSpotify(track: track, modifiers: modifiers, authorizeCompletion: onCompleteAuthorizationWithSpotify, requestCompletion: onCompleteRequestSpotify)
+                    UpdateTrackRepository.standard.updateWithSpotify(
+                        track: track,
+                        modifiers: modifiers,
+                        authorizeCompletion: onCompleteAuthorizationWithSpotify,
+                        requestCompletion: onCompleteRequestSpotify
+                    )
                 } else {
                     alertDetail = AlertDetail(
                         title: "Failed to save credentials",
@@ -137,6 +162,10 @@ struct ContentView: View {
     
     private func onCompleteRequestSpotify(error: Error?) {
         if let error = error {
+            if (error is NoContentError) {
+                return
+            }
+
             alertDetail = AlertDetail(
                 title: "Error on request to Spotify API",
                 message: "\(error)",

@@ -60,15 +60,20 @@ class UpdateTrackRepository: NSObject {
         authenticationSession.start()
     }
     
-    func updateWithSpotify(track: Track, modifiers: [FormatPatternModifier], authorizeCompletion: @escaping (Result<SpotifyOAuthToken, Error>) -> Void, requestCompletion: @escaping (Error?) -> Void) {
+    func updateWithSpotify(
+        track: Track,
+        modifiers: [FormatPatternModifier],
+        authorizeCompletion: @escaping (Result<SpotifyOAuthToken, Error>) -> Void,
+        requestCompletion: @escaping (Error?) -> Void
+    ) {
         if let tokenData = KeyChainRepository.standard.getFromKeyChainOrNull(service: "oauth-token", account: "spotify") {
             let token = String(data: tokenData, encoding: .utf8)!
-            var request = URLRequest(url: URL(string: "https://api.spotify.com/v1/me/player")!)
+            var request = URLRequest(url: URL(string: "https://api.spotify.com/v1/me/player/currently-playing")!)
             request.httpMethod = "GET"
             request.url?.append(queryItems: [URLQueryItem(name: "market", value: "from_token")])
             request.allHTTPHeaderFields = [
                 "Authorization": "Bearer \(token)",
-                "Accept-Language": "ja",
+                "Accept-Language": Locale.current.language.languageCode?.identifier ?? "ja",
                 "Content-Type": "application/json"
             ]
             URLSession.shared.dataTask(with: request) { data, response, error in
@@ -78,7 +83,6 @@ class UpdateTrackRepository: NSObject {
                     return
                 }
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                    print(statusCode)
                     if (statusCode == 204) {
                         requestCompletion(NoContentError())
                         self.updateWithLocalAppleMusic(track: track, modifiers: modifiers)
