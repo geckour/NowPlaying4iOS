@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  NowPlaying4iOS
+//  NP4i
 //
 //  Created by geckour on 2023/04/13.
 //
@@ -110,7 +110,8 @@ struct ContentView: View {
                             track: track,
                             modifiers: modifiers,
                             authorizeCompletion: onCompleteAuthorizationWithSpotify,
-                            requestCompletion: onCompleteRequestSpotify
+                            requestCompletion: onCompleteRequestSpotify,
+                            onlyAlreadyHasToken: true
                         )
                     }
             })

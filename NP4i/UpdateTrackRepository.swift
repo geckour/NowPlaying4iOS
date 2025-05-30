@@ -1,6 +1,6 @@
 //
 //  SpotifyRepository.swift
-//  NowPlaying4iOS
+//  NP4i
 //
 //  Created by geckour on 2023/04/15.
 //
@@ -20,10 +20,10 @@ class UpdateTrackRepository: NSObject {
     let clientSecret = Bundle.main.infoDictionary?["SPOTIFY_CLIENT_SECRET"] as? String ?? ""
     
     func authorizeWithSpotify(track: Track, modifiers: [FormatPatternModifier], completion: @escaping (Result<SpotifyOAuthToken, Error>) -> Void) {
-        let urlString = "https://accounts.spotify.com/authorize?response_type=code&client_id=\(clientId)&scope=user-read-currently-playing&redirect_uri=np4ios%3A%2F%2Fspotify.callback&state=\(self.generateState(withLength: 16))"
+        let urlString = "https://accounts.spotify.com/authorize?response_type=code&client_id=\(clientId)&scope=user-read-currently-playing&redirect_uri=np4i%3A%2F%2Fspotify.callback&state=\(self.generateState(withLength: 16))"
         let authenticationSession = ASWebAuthenticationSession(
             url: URL(string: urlString)!,
-            callbackURLScheme: nil
+            callbackURLScheme: "np4i"
         ) { url, error in
             if let error = error {
                 completion(.failure(error))
@@ -39,7 +39,7 @@ class UpdateTrackRepository: NSObject {
                 request.httpMethod = "POST"
                 request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
                 request.setValue("Basic \(authorizationHeaderValue)", forHTTPHeaderField:"Authorization")
-                request.httpBody = "code=\(code)&redirect_uri=np4ios%3A%2F%2Fspotify.callback&grant_type=authorization_code".data(using: .utf8)
+                request.httpBody = "code=\(code)&redirect_uri=np4i%3A%2F%2Fspotify.callback&grant_type=authorization_code".data(using: .utf8)
                 URLSession.shared.dataTask(with: request) { data, response, error in
                     if let error = error {
                         completion(.failure(error))
@@ -64,7 +64,8 @@ class UpdateTrackRepository: NSObject {
         track: Track,
         modifiers: [FormatPatternModifier],
         authorizeCompletion: @escaping (Result<SpotifyOAuthToken, Error>) -> Void,
-        requestCompletion: @escaping (Error?) -> Void
+        requestCompletion: @escaping (Error?) -> Void,
+        onlyAlreadyHasToken: Bool = false
     ) {
         if let tokenData = KeyChainRepository.standard.getFromKeyChainOrNull(service: "oauth-token", account: "spotify") {
             let token = String(data: tokenData, encoding: .utf8)!
@@ -167,7 +168,9 @@ class UpdateTrackRepository: NSObject {
                 }
             }.resume()
         } else {
-            self.authorizeWithSpotify(track: track, modifiers: modifiers, completion: authorizeCompletion)
+            if (!onlyAlreadyHasToken) {
+                self.authorizeWithSpotify(track: track, modifiers: modifiers, completion: authorizeCompletion)
+            }
         }
     }
     

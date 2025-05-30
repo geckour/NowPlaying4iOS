@@ -1,6 +1,6 @@
 //
 //  SettingsView.swift
-//  NowPlaying4iOS
+//  NP4i
 //
 //  Created by geckour on 2023/04/15.
 //

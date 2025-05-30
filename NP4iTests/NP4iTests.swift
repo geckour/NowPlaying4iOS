@@ -1,14 +1,14 @@
 //
-//  NowPlaying4iOSTests.swift
-//  NowPlaying4iOSTests
+//  NP4iTests.swift
+//  NP4iTests
 //
 //  Created by geckour on 2023/04/13.
 //
 
 import XCTest
-@testable import NowPlaying4iOS
+@testable import NP4i
 
-final class NowPlaying4iOSTests: XCTestCase {
+final class NP4iTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

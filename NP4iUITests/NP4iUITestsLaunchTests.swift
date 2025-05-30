@@ -1,13 +1,13 @@
 //
-//  NowPlaying4iOSUITestsLaunchTests.swift
-//  NowPlaying4iOSUITests
+//  NP4iUITestsLaunchTests.swift
+//  NP4iUITests
 //
 //  Created by geckour on 2023/04/13.
 //
 
 import XCTest
 
-final class NowPlaying4iOSUITestsLaunchTests: XCTestCase {
+final class NP4iUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
