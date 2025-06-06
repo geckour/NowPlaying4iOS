@@ -36,7 +36,11 @@ struct ContentView: View {
                         HStack(alignment: .center) {
                             VStack(alignment: .center) {
                                 Button(action: {
-                                    UpdateTrackRepository.standard.authorizeWithSpotify(track: track, modifiers: modifiers, completion: onCompleteAuthorizationWithSpotify)
+                                    UpdateTrackRepository.standard.authorizeWithSpotify(
+                                        track: track,
+                                        modifiers: modifiers,
+                                        completion: onCompleteAuthorizationWithSpotify
+                                    )
                                 }) {
                                     Label(LocalizedStringKey("SpotifyAuthTitle"), systemImage: "globe")
                                 }.padding(.top, 20)
@@ -87,11 +91,12 @@ struct ContentView: View {
                     }
                 }
                 .refreshable {
-                    UpdateTrackRepository.standard.updateWithSpotify(
+                    UpdateTrackRepository.standard.update(
                         track: track,
                         modifiers: modifiers,
                         authorizeCompletion: onCompleteAuthorizationWithSpotify,
-                        requestCompletion: onCompleteRequestSpotify
+                        requestCompletion: onCompleteRequestSpotify,
+                        onlyAlreadyHasSpotifyToken: true
                     )
                 }
 //                AdMobBannerView()
@@ -106,12 +111,12 @@ struct ContentView: View {
                         object: nil,
                         queue: nil
                     ) { notification in
-                        UpdateTrackRepository.standard.updateWithSpotify(
+                        UpdateTrackRepository.standard.update(
                             track: track,
                             modifiers: modifiers,
                             authorizeCompletion: onCompleteAuthorizationWithSpotify,
                             requestCompletion: onCompleteRequestSpotify,
-                            onlyAlreadyHasToken: true
+                            onlyAlreadyHasSpotifyToken: true
                         )
                     }
             })
@@ -143,7 +148,7 @@ struct ContentView: View {
                 UpdateTrackRepository.standard.clearCredentials()
                 let saveCredentialsResult = UpdateTrackRepository.standard.saveCredentials(token: token)
                 if (saveCredentialsResult.success) {
-                    UpdateTrackRepository.standard.updateWithSpotify(
+                    UpdateTrackRepository.standard.update(
                         track: track,
                         modifiers: modifiers,
                         authorizeCompletion: onCompleteAuthorizationWithSpotify,

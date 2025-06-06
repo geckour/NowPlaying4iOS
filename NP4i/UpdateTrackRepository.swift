@@ -8,7 +8,7 @@
 import Foundation
 import OAuthSwift
 import SwiftUI
-import MediaPlayer
+@preconcurrency import MediaPlayer
 import MusicKit
 import AuthenticationServices
 
@@ -60,12 +60,12 @@ class UpdateTrackRepository: NSObject {
         authenticationSession.start()
     }
     
-    func updateWithSpotify(
+    func update(
         track: Track,
         modifiers: [FormatPatternModifier],
         authorizeCompletion: @escaping (Result<SpotifyOAuthToken, Error>) -> Void,
         requestCompletion: @escaping (Error?) -> Void,
-        onlyAlreadyHasToken: Bool = false
+        onlyAlreadyHasSpotifyToken: Bool = false
     ) {
         if let tokenData = KeyChainRepository.standard.getFromKeyChainOrNull(service: "oauth-token", account: "spotify") {
             let token = String(data: tokenData, encoding: .utf8)!
@@ -118,6 +118,7 @@ class UpdateTrackRepository: NSObject {
                                                 )
                                             }
                                         }
+                                        self.updateByAppleMusicSearch(track: track, modifiers: modifiers)
                                     }.resume()
                                 } else {
                                     requestCompletion(NoContentError())
@@ -168,7 +169,9 @@ class UpdateTrackRepository: NSObject {
                 }
             }.resume()
         } else {
-            if (!onlyAlreadyHasToken) {
+            if (onlyAlreadyHasSpotifyToken) {
+                updateWithLocalAppleMusic(track: track, modifiers: modifiers)
+            } else {
                 self.authorizeWithSpotify(track: track, modifiers: modifiers, completion: authorizeCompletion)
             }
         }
@@ -196,6 +199,119 @@ class UpdateTrackRepository: NSObject {
         KeyChainRepository.standard.deleteFromKeyChain(service: "refresh-token", account: "spotify")
         UserDefaults.standard.removeObject(forKey: "token-expires-at")
     }
+
+    func updateByAppleMusicSearch(track: Track, modifiers: [FormatPatternModifier]) {
+        Task {
+            do {
+                var request = MusicCatalogSearchRequest(term: "\(track.title)+\(track.album)+\(track.artist)", types: [Song.self])
+                request.limit = 1
+                let response = try await request.response()
+                
+                if let song = response.songs.first {
+                    if let a = song.artwork {
+                        let artworkURL = a.url(width: a.maximumWidth, height: a.maximumHeight)!
+                        
+                        DispatchQueue.main.async {
+                            track.update(
+                                title: track.title,
+                                artist: track.artist,
+                                album: track.album,
+                                composer: track.composer,
+                                spotifyUrl: track.spotifyUrl,
+                                appleMusicUrl: song.url?.string,
+                                artworkURL: artworkURL,
+                                modifiers: modifiers
+                            )
+                        }
+                    }
+                    DispatchQueue.main.async {
+                        track.update(
+                            title: track.title,
+                            artist: track.artist,
+                            album: track.album,
+                            composer: track.composer,
+                            spotifyUrl: track.spotifyUrl,
+                            appleMusicUrl: song.url?.string,
+                            modifiers: modifiers
+                        )
+                    }
+                }
+            } catch {
+                print(error)
+                // Do nothing
+            }
+        }
+    }
+    
+    func updateBySpotifySearch(track: Track, modifiers: [FormatPatternModifier]) {
+        if let tokenData = KeyChainRepository.standard.getFromKeyChainOrNull(service: "oauth-token", account: "spotify") {
+            let token = String(data: tokenData, encoding: .utf8)!
+            var request = URLRequest(url: URL(string: "https://api.spotify.com/v1/search")!)
+            request.httpMethod = "GET"
+            request.url?.append(
+                queryItems: [
+                    URLQueryItem(name: "market", value: "from_token"),
+                    URLQueryItem(name: "q", value: "\(track.title.normalizeAppleMusicString())+\(track.album.normalizeAppleMusicString())+\(track.artist.normalizeAppleMusicString())"),
+                    URLQueryItem(name: "type", value: "track"),
+                    URLQueryItem(name: "limit", value: "1")
+                ]
+            )
+            request.allHTTPHeaderFields = [
+                "Authorization": "Bearer \(token)",
+                "Accept-Language": Locale.current.language.languageCode?.identifier ?? "ja",
+                "Content-Type": "application/json"
+            ]
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    print(error)
+                    return
+                }
+                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                    if (statusCode == 204) {
+                        return
+                    }
+                    if (statusCode == 200) {
+                        if let data = data {
+                            do {
+                                let spotifyResult = try JSONDecoder().decode(SpotifySearchResult.self, from: data)
+                                if let spotifyTrack = spotifyResult.tracks?.items.first {
+                                    DispatchQueue.main.async {
+                                        track.update(
+                                            title: track.title,
+                                            artist: track.artist,
+                                            album: track.album,
+                                            spotifyUrl: spotifyTrack.external_urls.spotify,
+                                            appleMusicUrl: track.appleMusicUrl,
+                                            modifiers: modifiers
+                                        )
+                                    }
+                                    
+                                    URLSession.shared.dataTask(with: URL(string: spotifyTrack.album.images.first!.url)!) { data, response, error in
+                                        if let data = data {
+                                            DispatchQueue.main.async {
+                                                track.update(
+                                                    title: track.title,
+                                                    artist: track.artist,
+                                                    album: track.album,
+                                                    spotifyUrl: spotifyTrack.external_urls.spotify,
+                                                    appleMusicUrl: track.appleMusicUrl,
+                                                    artwork: track.artwork ?? UIImage(data: data),
+                                                    modifiers: modifiers
+                                                )
+                                            }
+                                        }
+                                    }.resume()
+                                }
+                            } catch {
+                                print(error)
+                                // Do nothing
+                            }
+                        }
+                    }
+                }
+            }.resume()
+        }
+    }
     
     func updateWithLocalAppleMusic(track: Track, modifiers: [FormatPatternModifier]) {
         if let item = MPMusicPlayerController.systemMusicPlayer.nowPlayingItem {
@@ -212,6 +328,8 @@ class UpdateTrackRepository: NSObject {
                             artwork: artwork,
                             modifiers: modifiers
                         )
+                        self.updateBySpotifySearch(track: track, modifiers: modifiers)
+                        self.updateByAppleMusicSearch(track: track, modifiers: modifiers)
                     }
                     return
                 }
@@ -248,6 +366,7 @@ class UpdateTrackRepository: NSObject {
                                     artwork: artwork,
                                     modifiers: modifiers
                                 )
+                                self.updateBySpotifySearch(track: track, modifiers: modifiers)
                             }
                             return
                         } else {
@@ -260,6 +379,7 @@ class UpdateTrackRepository: NSObject {
                                     artwork: artwork,
                                     modifiers: modifiers
                                 )
+                                self.updateBySpotifySearch(track: track, modifiers: modifiers)
                             }
                         }
                     } catch {
@@ -272,6 +392,7 @@ class UpdateTrackRepository: NSObject {
                                 artwork: artwork,
                                 modifiers: modifiers
                             )
+                            self.updateBySpotifySearch(track: track, modifiers: modifiers)
                         }
                     }
                 }
@@ -288,9 +409,10 @@ class UpdateTrackRepository: NSObject {
                                     artist: item.artist ?? "",
                                     album: item.albumTitle ?? "",
                                     composer: item.composer,
-                                    appleMusicUrl: song.title,
+                                    appleMusicUrl: song.url?.string,
                                     modifiers: modifiers
                                 )
+                                self.updateBySpotifySearch(track: track, modifiers: modifiers)
                             }
                             return
                         } else {
@@ -302,6 +424,7 @@ class UpdateTrackRepository: NSObject {
                                     composer: item.composer,
                                     modifiers: modifiers
                                 )
+                                self.updateBySpotifySearch(track: track, modifiers: modifiers)
                             }
                         }
                     } catch {
@@ -313,6 +436,7 @@ class UpdateTrackRepository: NSObject {
                                 composer: item.composer,
                                 modifiers: modifiers
                             )
+                            self.updateBySpotifySearch(track: track, modifiers: modifiers)
                         }
                     }
                 }
@@ -361,30 +485,37 @@ struct SpotifyOAuthToken: Decodable {
 
 struct SpotifyNowPlayingResult: Decodable {
     let item: SpotifyTrack?
+}
+
+struct SpotifySearchResult: Decodable {
+    let tracks: SpotifyTracks?
+    struct SpotifyTracks: Decodable {
+        let items: [SpotifyTrack]
+    }
+}
+
+struct SpotifyTrack: Decodable {
+    let id: String
+    let external_urls: SpotifyExternalUrl
+    let name: String
+    let album: SpotifyAlbum
+    let artists: [SpotifyArtist]
     
-    struct SpotifyTrack: Decodable {
-        let id: String
-        let external_urls: SpotifyExternalUrl
+    struct SpotifyExternalUrl: Decodable {
+        let spotify: String
+    }
+    
+    struct SpotifyAlbum: Decodable {
         let name: String
-        let album: SpotifyAlbum
-        let artists: [SpotifyArtist]
-        
-        struct SpotifyExternalUrl: Decodable {
-            let spotify: String
-        }
-        
-        struct SpotifyAlbum: Decodable {
-            let name: String
-            let images: [SpotifyImage]
-        }
-        
-        struct SpotifyImage: Decodable {
-            let url: String
-        }
-        
-        struct SpotifyArtist: Decodable {
-            let name: String
-        }
+        let images: [SpotifyImage]
+    }
+    
+    struct SpotifyImage: Decodable {
+        let url: String
+    }
+    
+    struct SpotifyArtist: Decodable {
+        let name: String
     }
 }
 
@@ -394,4 +525,11 @@ struct NoContentError: LocalizedError {
 
 enum CustomError: Error {
     case messageError(String)
+}
+
+extension String {
+    func normalizeAppleMusicString() -> String {
+        return self.replacing(/(.+)\s-\sEP/) { match in "\(match.1)" }
+            .replacing(/(.+)\s-\sSingle/) { match in "\(match.1)" }
+    }
 }
