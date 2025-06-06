@@ -32,6 +32,7 @@ extension String {
             FormatPattern.ALBUM.rawValue,
             FormatPattern.COMPOSER.rawValue,
             FormatPattern.SPOTIFY_URL.rawValue,
+            FormatPattern.APPLE_MUSIC_URL.rawValue,
             FormatPattern.NEW_LINE.rawValue
         )
         let escapes: [(offset: Int, element: String)] = splitList.enumerated().filter { $0.element == "'" }
